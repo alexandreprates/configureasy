@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["ajfprates@gmail.com"]
   spec.summary       = %q{A Simple way to get configs in your Classes/Modules.}
   spec.description   = %q{A Simple way to get configs in your Classes/Modules.}
-  spec.homepage      = ""
+  spec.homepage      = "https://gitlab.ir7.com.br/videos/configureasy"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
