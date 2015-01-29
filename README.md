@@ -3,7 +3,7 @@ Configureasy
 
 A forma mais simples de carregar arquivos de configuração em suas Classe/Módulos.
 
-##Instalação
+## Instalação
 
 Basta adicionar esta linha no seu Gemfile
 
@@ -19,7 +19,7 @@ Ou instale manualmente:
 
     $ gem install configureasy
 
-##Como usar
+## Como usar
 
 Basta incluir na classe e começar a usar
 
@@ -53,6 +53,6 @@ Foo.config.raw_content
 # => {'foo' => 'bar'}
 ```
 
-##Duvidas, questões e desconfianças em geral
+## Duvidas, questões e desconfianças em geral
 
 mail me: ajfprates@gmail.com
