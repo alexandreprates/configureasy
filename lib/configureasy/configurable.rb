@@ -1,30 +1,31 @@
 require 'yaml'
 
 module Configureasy::Configurable
-  # Change config file name
-  # =Example=
+  # Setting config file name
   #
-  # config_name :foo
-  # => APP_ROOT/config/foo.yml
+  # Example
+  #   config_name :foo
+  #   => APP_ROOT/config/foo.yml
   #
-  # config_name :bar
-  # => APP_ROOT/config/bar.yml
+  #   config_name :bar
+  #   => APP_ROOT/config/bar.yml
+  #
   def config_name(filename = nil)
     @config_name = filename if filename
     @config_name || self.name.downcase
   end
 
-  # Access configs
+  # Load the config yaml and return Configureasy::Config instance
   def config
     @config ||= load_configs
   end
 
-  # Return true when config file exists
+  # Looks for config file an return true if file exists
   def have_config?
     File.exist? config_filename
   end
 
-  # Force config to reload
+  # Reload configs
   def reset_config!
     @config = nil
     config

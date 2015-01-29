@@ -1,7 +1,12 @@
 require 'ostruct'
 
 ##
-# Class for access the config settings
+# Class for store and retrive config values
+#
+# Example
+#   >> Confugureasy::Config.new(foo: 'foo').foo
+#   => 'foo'
+#
 class Configureasy::Config < OpenStruct
   # return config as hash
   def as_hash

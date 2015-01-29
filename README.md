@@ -1,31 +1,47 @@
-# Configureasy
+Configureasy
+=============
 
-TODO: Write a gem description
+A forma mais simples de carregar arquivos de configuração em suas Classe/Módulos.
 
-## Installation
+##Instalação
 
-Add this line to your application's Gemfile:
+Basta adicionar esta linha no seu Gemfile
 
 ```ruby
 gem 'configureasy'
 ```
 
-And then execute:
+E entao executar:
 
     $ bundle
 
-Or install it yourself as:
+Ou instale manualmente:
 
     $ gem install configureasy
 
-## Usage
+##Como usar
 
-TODO: Write usage instructions here
+Basta incluir na classe e começar a usar
 
-## Contributing
+```ruby
+class Foo
+  include Configurable
+end
 
-1. Fork it ( https://github.com/[my-github-username]/configureasy/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+Foo.config.some_key_in_config
+# => 'some value for that key'
+```
+
+Por padrão ele busca um arquivo (.yml) no diretório _config_, caso precise especificar um nome diferente utilize o método _config_name_.
+
+```ruby
+class Foo
+  include Configurable
+  # load APP_ROOT/config/foo_config.yml
+  config_name :foo_config
+end
+```
+
+##Duvidas, questões e desconfianças em geral
+
+mail me: ajfprates@gmail.com
