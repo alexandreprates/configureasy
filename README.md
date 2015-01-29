@@ -42,6 +42,17 @@ class Foo
 end
 ```
 
+Caso precise ver o conteúdo original do arquivo utilize o método _raw_content_.
+
+```ruby
+class Foo
+  include Configurable
+end
+
+Foo.config.raw_content
+# => {'foo' => 'bar'}
+```
+
 ##Duvidas, questões e desconfianças em geral
 
 mail me: ajfprates@gmail.com

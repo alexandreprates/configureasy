@@ -9,7 +9,7 @@ require 'ostruct'
 #
 class Configureasy::Config < OpenStruct
   # return config as hash
-  def as_hash
+  def raw_content
     @table
   end
 end
