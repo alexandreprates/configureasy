@@ -5,9 +5,7 @@ class Foo
 end
 
 describe Configureasy::Configurable do
-
   describe ".config_name" do
-
     it "by default config name is class name" do
       expect(Foo.config_name).to eq('foo')
     end
@@ -22,7 +20,13 @@ describe Configureasy::Configurable do
       Foo.config_name "other_conf"
       expect(Foo.send :config_filename).to match(/other_conf\.yml$/)
     end
+  end
 
+  describe '.config_filename' do
+    it "set config filename" do
+      Foo.config_filename '.hidedir/secret_config.yml'
+      expect(Foo.config_filename).to end_with('.hidedir/secret_config.yml')
+    end
   end
 
   describe '#config' do

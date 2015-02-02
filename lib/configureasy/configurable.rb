@@ -10,9 +10,14 @@ module Configureasy::Configurable
   #   config_name :bar
   #   => APP_ROOT/config/bar.yml
   #
-  def config_name(filename = nil)
-    @config_name = filename if filename
+  def config_name(name = nil)
+    @config_name = name if name
     @config_name || self.name.downcase
+  end
+
+  def config_filename(filename = nil)
+    @config_filename = File.expand_path filename if filename
+    @config_filename || File.expand_path("./config/#{config_name}.yml")
   end
 
   # Load the config yaml and return Configureasy::Config instance
@@ -49,7 +54,4 @@ module Configureasy::Configurable
     ENV['RAILS_ENV'] || ENV['RUBY_ENV'] || ENV['RACK_ENV'] || 'development'
   end
 
-  def config_filename
-    File.expand_path "./config/#{config_name}.yml"
-  end
 end

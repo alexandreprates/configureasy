@@ -42,6 +42,16 @@ class Foo
 end
 ```
 
+Caso precise você tambem pode especificar de onde carregar a configuração usando o método _config_filename_.
+
+```ruby
+class Foo
+  include Configureasy
+  # load APP_ROOT/.hide_dir/secrets.yml
+  config_filename '.hide_dir/secrets.yml'
+end
+```
+
 Caso precise ver o conteúdo original do arquivo utilize o método _raw_content_.
 
 ```ruby
