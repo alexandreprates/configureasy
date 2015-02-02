@@ -25,7 +25,7 @@ Basta incluir na classe e começar a usar
 
 ```ruby
 class Foo
-  include Configurable
+  include Configureasy
 end
 
 Foo.config.some_key_in_config
@@ -36,7 +36,7 @@ Por padrão ele busca um arquivo (.yml) no diretório _config_, caso precise esp
 
 ```ruby
 class Foo
-  include Configurable
+  include Configureasy
   # load APP_ROOT/config/foo_config.yml
   config_name :foo_config
 end
@@ -46,7 +46,7 @@ Caso precise ver o conteúdo original do arquivo utilize o método _raw_content_
 
 ```ruby
 class Foo
-  include Configurable
+  include Configureasy
 end
 
 Foo.config.raw_content
