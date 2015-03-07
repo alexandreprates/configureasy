@@ -3,10 +3,14 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in configureasy.gemspec
 gemspec
 
-gem 'rake'
-
 group :development do
+  gem 'terminal-notifier-guard'
+  gem 'pry'
+  gem 'pry-nav'
+end
+
+group :test do
+  gem 'rake'
   gem 'rspec'
   gem 'guard-rspec'
-  gem 'terminal-notifier-guard'
 end
