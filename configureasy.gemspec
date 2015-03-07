@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Configureasy::VERSION
   spec.authors       = ["Alexandre Prates"]
   spec.email         = ["ajfprates@gmail.com"]
-  spec.summary       = %q{A Simple way to get configs in your Classes/Modules.}
-  spec.description   = %q{A Simple way to get configs in your Classes/Modules.}
+  spec.summary       = %q{A Simple way to get configs.}
+  spec.description   = %q{A Simple way to get configs.}
   spec.homepage      = "https://github.com/alexandreprates/configureasy"
   spec.license       = "MIT"
 
