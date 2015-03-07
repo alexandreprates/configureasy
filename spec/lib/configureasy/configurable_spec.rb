@@ -30,7 +30,7 @@ describe Configureasy::Configurable do
   end
 
   describe '#config' do
-    let(:yaml_content) { {'development' => {'foo' => 'bar'}, 'other' => {'foo' => 'other'} } }
+    let(:yaml_content) { {'development' => {'foo' => 'development'}, 'production' => {'foo' => 'production'} } }
 
     it "raise excepion when file missing" do
       expect { Foo.config }.to raise_exception Configureasy::ConfigNotFound
@@ -46,29 +46,30 @@ describe Configureasy::Configurable do
     it "access values on config file" do
       allow(YAML).to receive(:load_file).and_return(yaml_content)
       allow(File).to receive(:exist?).and_return(true)
+      allow(ENV).to receive(:[]).and_return(nil)
 
       expect(Foo.config).to respond_to(:foo)
-      expect(Foo.config.foo).to eq('bar')
+      expect(Foo.config.foo).to eq('development')
     end
 
     it "load contend for current environment" do
+      allow(ENV).to receive(:[]).and_return(nil)
       allow(YAML).to receive(:load_file).and_return(yaml_content)
       allow(File).to receive(:exist?).and_return(true)
 
-      ENV['RUBY_ENV'] = 'development'
-      expect(Foo.reset_config!.foo).to eq('bar')
+      allow(ENV).to receive(:[]).with('RUBY_ENV').and_return('development')
+      expect(Foo.reset_config!.foo).to eq('development')
 
-      ENV['RUBY_ENV'] = 'other'
-      expect(Foo.reset_config!.foo).to eq('other')
+      allow(ENV).to receive(:[]).with('RUBY_ENV').and_return('production')
+      expect(Foo.reset_config!.foo).to eq('production')
 
-      ENV['RUBY_ENV'] = nil
+      allow(ENV).to receive(:[]).with('RUBY_ENV').and_return(nil)
 
-      ENV['RACK_ENV'] = 'development'
-      expect(Foo.reset_config!.foo).to eq('bar')
-      ENV['RACK_ENV'] = nil
+      allow(ENV).to receive(:[]).with('RACK_ENV').and_return('development')
+      expect(Foo.reset_config!.foo).to eq('development')
 
-      ENV['RAILS_ENV'] = 'other'
-      expect(Foo.reset_config!.foo).to eq('other')
+      allow(ENV).to receive(:[]).with('RAILS_ENV').and_return('production')
+       expect(Foo.reset_config!.foo).to eq('production')
     end
 
     it "config is kind of Configs class" do
