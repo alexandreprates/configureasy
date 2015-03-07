@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
+  gem 'terminal-notifier'
   gem 'terminal-notifier-guard'
   gem 'pry'
   gem 'pry-nav'
