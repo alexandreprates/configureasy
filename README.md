@@ -1,6 +1,8 @@
 Configureasy
 =============
 
+[![Build Status](https://travis-ci.org/alexandreprates/configureasy.svg?branch=master)](https://travis-ci.org/alexandreprates/configureasy) [![Coverage Status](https://coveralls.io/repos/alexandreprates/configureasy/badge.svg)](https://coveralls.io/r/alexandreprates/configureasy) [![Inline docs](http://inch-ci.org/github/alexandreprates/configureasy.svg?branch=master)](http://inch-ci.org/github/alexandreprates/configureasy)
+
 A forma mais simples de carregar arquivos de configuração em suas Classe/Módulos.
 
 ## Instalação
