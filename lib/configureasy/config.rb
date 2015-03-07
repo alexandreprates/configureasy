@@ -1,29 +1,27 @@
 require 'ostruct'
 
-##
-# Class for store and retrive config values
+# Store data structure (Hash) and allow access values using method calling
 #
-# Example
-#   >> Confugureasy::Config.new(foo: 'foo').foo
-#   => 'foo'
+#    Confugureasy::Config.new(foo: 'foo').foo
+#    # => 'foo'
 #
-#  >> Configureasy::Config.new(:foo => {:bar => :value}).foo.bar
-#  => :value
+#    Configureasy::Config.new(:foo => {:bar => :value}).foo.bar
+#    # => :value
 #
 # You can access values using [] too
 #
-# Example
-#    >> Configureasy::Config.new(foo: 'bar')[:foo]
-#    => 'bar'
+#    Configureasy::Config.new(foo: 'bar')[:foo]
+#    # => 'bar'
 #
 # Beside you retrive data as hash
 #
-# Example
-#    >> Configureasy::Config(foo: 'bar').as_hash
-#    => {:foo => 'bar'}
+#    Configureasy::Config(foo: 'bar').as_hash
+#    # => {:foo => 'bar'}
 class Configureasy::Config < OpenStruct
 
-  # Convert a hash data into methods recursively
+  # Convert a hash data into methods recursively.
+  # Params:
+  #  [+params+]:: Hash with data do convert
   def initialize(params = {})
     @hash = params
     params = params.inject({}) do |hash, data|
@@ -35,10 +33,11 @@ class Configureasy::Config < OpenStruct
   end
 
   # Return data for config
+  # Params:
+  #  [+key+]:: name of config
   #
-  # Example
-  #    >> Configureasy::Config.new(foo: 'bar')[:foo]
-  #    => 'bar'
+  #    Configureasy::Config.new(foo: 'bar')[:foo]
+  #    # => 'bar'
   def [](key)
     self.send key
   end
