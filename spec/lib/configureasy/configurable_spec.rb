@@ -30,7 +30,7 @@ describe Configureasy::Configurable do
   end
 
   describe '#config' do
-    let(:yaml_content) { {'development' => {'foo' => 'bar'}, 'test' => {'foo' => 'test'} } }
+    let(:yaml_content) { {'development' => {'foo' => 'bar'}, 'other' => {'foo' => 'other'} } }
 
     it "raise excepion when file missing" do
       expect { Foo.config }.to raise_exception Configureasy::ConfigNotFound
@@ -58,8 +58,8 @@ describe Configureasy::Configurable do
       ENV['RUBY_ENV'] = 'development'
       expect(Foo.reset_config!.foo).to eq('bar')
 
-      ENV['RUBY_ENV'] = 'test'
-      expect(Foo.reset_config!.foo).to eq('test')
+      ENV['RUBY_ENV'] = 'other'
+      expect(Foo.reset_config!.foo).to eq('other')
 
       ENV['RUBY_ENV'] = nil
 
@@ -67,8 +67,8 @@ describe Configureasy::Configurable do
       expect(Foo.reset_config!.foo).to eq('bar')
       ENV['RACK_ENV'] = nil
 
-      ENV['RAILS_ENV'] = 'test'
-      expect(Foo.reset_config!.foo).to eq('test')
+      ENV['RAILS_ENV'] = 'other'
+      expect(Foo.reset_config!.foo).to eq('other')
     end
 
     it "config is kind of Configs class" do
