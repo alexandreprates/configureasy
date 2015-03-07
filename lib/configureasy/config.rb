@@ -34,6 +34,15 @@ class Configureasy::Config < OpenStruct
     super params
   end
 
+  # Return data for config
+  #
+  # Example
+  #    >> Configureasy::Config.new(foo: 'bar')[:foo]
+  #    => 'bar'
+  def [](key)
+    self.send key
+  end
+
   # return config as hash
   def as_hash
     @hash
