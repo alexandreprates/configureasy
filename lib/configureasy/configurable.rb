@@ -1,57 +1,73 @@
 require 'yaml'
 
+# Allows loading of different configuration files.
+#
+# Example
+#    class Dumb
+#      include Configureasy
+#
+#      # create class method _config_ with content of config/config.yml
+#      load_config :config
+#
+#      # create class method _secrets_ with content for config/session_secrets.yml
+#      load_config :session_secrets, as: :secrets
+#
+#      # create class method _aws_keys_ with content for './aws/keys.yml'
+#      load_config :keys, as: :aws_keys, path: './aws'
+#    end
+#
 module Configureasy::Configurable
+  @@configurables = {}
+
+  # dinamically create method for access config data
+  # Params:
+  #
+  #  [file_basename] config file name (by default in *config* directory)
+  #  [as] generated method name (by default same as file_basename)
+  #  [path] config path (by default './config')
+  def load_config(file_basename, options = {})
+    name = options[:as] || file_basename
+    path = options[:path] || './config'
+    filename = File.join path, "#{file_basename}.yml"
+    self.class.send(:define_method, name)              { _configurable_for(filename) }
+    self.class.send(:define_method, "#{name}_reload!") { _configurable_reload(filename) }
+  end
+
+  # @deprecated Please use {#load_config} instead
   # Setting config file name
   #
   # Example
+  #   # load contents for ./config/foo.yml
   #   config_name :foo
-  #   => APP_ROOT/config/foo.yml
   #
+  #   # load contents for ./config/bar.yml
   #   config_name :bar
-  #   => APP_ROOT/config/bar.yml
+    def config_name(name = nil)
+    warn "[DEPRECATION] `config_name` is deprecated.  Please use `load_config` instead."
+    load_config name, as: 'config'
+  end
+
+  # @deprecated Please use {#load_config} instead
+  # Load config in specific location
   #
-  def config_name(name = nil)
-    @config_name = name if name
-    @config_name || self.name.downcase
-  end
-
+  # Example
+  #    # load contents for /etc/my_configs.yml
+  #    config_filename '/etc/my_configs.yml'
   def config_filename(filename = nil)
-    @config_filename = File.expand_path filename if filename
-    @config_filename || File.expand_path("./config/#{config_name}.yml")
-  end
-
-  # Load the config yaml and return Configureasy::Config instance
-  def config
-    @config ||= load_configs
-  end
-
-  # Looks for config file an return true if file exists
-  def have_config?
-    File.exist? config_filename
-  end
-
-  # Reload configs
-  def reset_config!
-    @config = nil
-    config
+    warn "[DEPRECATION] `config_filename` is deprecated.  Please use `load_config` instead."
+    basename = File.basename(filename, '.yml')
+    path = File.dirname(filename)
+    load_config basename, as: 'config', path: path
   end
 
   private
 
-  def load_configs
-    configs_hash = parse_configs
-    raise Configureasy::ConfigInvalid, "invalid config file '#{config_filename}'", caller unless configs_hash.is_a? Hash
-
-    Configureasy::Config.new configs_hash[_current_env] || configs_hash
+  def _configurable_for(filename) # :nodoc:
+    @@configurables[filename.to_sym] || _configurable_reload(filename)
   end
 
-  def parse_configs
-    raise Configureasy::ConfigNotFound, "file not found '#{config_filename}'", caller unless have_config?
-    YAML.load_file config_filename
-  end
-
-  def _current_env
-    ENV['RAILS_ENV'] || ENV['RUBY_ENV'] || ENV['RACK_ENV'] || 'development'
+  def _configurable_reload(filename) # :nodoc:
+    @@configurables[filename.to_sym] = Configureasy::ConfigParser.parse(filename)
   end
 
 end

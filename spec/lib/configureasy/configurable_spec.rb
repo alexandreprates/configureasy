@@ -1,82 +1,77 @@
 require 'spec_helper'
 
-class Foo
-  extend Configureasy::Configurable
-end
-
 describe Configureasy::Configurable do
-  describe ".config_name" do
-    it "by default config name is class name" do
-      expect(Foo.config_name).to eq('foo')
+  before(:all) { Configureasy::ConfigParser = double('ConfigParser') }
+
+  describe '.load_config' do
+    let(:dumb_class) do
+      Class.new do
+        extend Configureasy::Configurable
+        load_config :dumb_config
+        load_config :another_config
+      end
     end
 
-    it "changes config name" do
-      expect(Foo.config_name).to eq('foo')
-      Foo.config_name "bar"
-      expect(Foo.config_name).to eq('bar')
+    it 'dynamically generate methods' do
+      expect(dumb_class).to respond_to :dumb_config
     end
 
-    it "config name reflects on config_filename" do
-      Foo.config_name "other_conf"
-      expect(Foo.send :config_filename).to match(/other_conf\.yml$/)
+    it 'support more than one config' do
+      expect(dumb_class).to respond_to :another_config
+    end
+
+    it 'return ConfigParser content' do
+      expect(Configureasy::ConfigParser).to receive('parse').with('./config/dumb_config.yml').and_return('works')
+      expect(dumb_class.dumb_config).to eq 'works'
+    end
+  end
+
+  describe '.config_reload!' do
+    let(:dumb_class) do
+      Class.new do
+        extend Configureasy::Configurable
+        load_config :config
+      end
+    end
+
+    it 'reloading config file content' do
+      Configureasy::ConfigParser = double('ConfigParser')
+      allow(Configureasy::ConfigParser).to receive('parse').with('./config/config.yml') { 'works'.clone }
+
+      expect(dumb_class.config).not_to be dumb_class.config_reload!
+    end
+  end
+
+  describe '.config_name' do
+    let(:dumb_class) do
+      Class.new do
+        extend Configureasy::Configurable
+        config_name :deprecated
+      end
+    end
+
+    it "load config content into config method" do
+      Configureasy::ConfigParser = double('ConfigParser')
+      expect(Configureasy::ConfigParser).to receive('parse').with('./config/deprecated.yml').and_return('works')
+      expect(dumb_class).to respond_to :config
+      expect(dumb_class.config).to eq 'works'
     end
   end
 
   describe '.config_filename' do
-    it "set config filename" do
-      Foo.config_filename '.hidedir/secret_config.yml'
-      expect(Foo.config_filename).to end_with('.hidedir/secret_config.yml')
+    let(:dumb_class) do
+      Class.new do
+        extend Configureasy::Configurable
+        config_filename './deprecated/feature.yml'
+      end
+    end
+
+    it "load config with filename into config method" do
+      Configureasy::ConfigParser = double('ConfigParser')
+      expect(Configureasy::ConfigParser).to receive('parse').with('./deprecated/feature.yml').and_return('works')
+      expect(dumb_class).to respond_to :config
+      expect(dumb_class.config).to eq 'works'
     end
   end
 
-  describe '#config' do
-    let(:yaml_content) { {'development' => {'foo' => 'development'}, 'production' => {'foo' => 'production'} } }
-
-    it "raise excepion when file missing" do
-      expect { Foo.config }.to raise_exception Configureasy::ConfigNotFound
-    end
-
-    it "raise exception when file content is not valid yaml" do
-      allow(YAML).to receive(:load_file).and_return("wrong yaml content")
-      allow(File).to receive(:exist?).and_return(true)
-
-      expect { Foo.config }.to raise_exception Configureasy::ConfigInvalid
-    end
-
-    it "access values on config file" do
-      allow(YAML).to receive(:load_file).and_return(yaml_content)
-      allow(File).to receive(:exist?).and_return(true)
-      allow(ENV).to receive(:[]).and_return(nil)
-
-      expect(Foo.config).to respond_to(:foo)
-      expect(Foo.config.foo).to eq('development')
-    end
-
-    it "load contend for current environment" do
-      allow(ENV).to receive(:[]).and_return(nil)
-      allow(YAML).to receive(:load_file).and_return(yaml_content)
-      allow(File).to receive(:exist?).and_return(true)
-
-      allow(ENV).to receive(:[]).with('RUBY_ENV').and_return('development')
-      expect(Foo.reset_config!.foo).to eq('development')
-
-      allow(ENV).to receive(:[]).with('RUBY_ENV').and_return('production')
-      expect(Foo.reset_config!.foo).to eq('production')
-
-      allow(ENV).to receive(:[]).with('RUBY_ENV').and_return(nil)
-
-      allow(ENV).to receive(:[]).with('RACK_ENV').and_return('development')
-      expect(Foo.reset_config!.foo).to eq('development')
-
-      allow(ENV).to receive(:[]).with('RAILS_ENV').and_return('production')
-       expect(Foo.reset_config!.foo).to eq('production')
-    end
-
-    it "config is kind of Configs class" do
-      allow(YAML).to receive(:load_file).and_return(yaml_content)
-      allow(File).to receive(:exist?).and_return(true)
-
-      expect(Foo.config).to be_kind_of(Configureasy::Config)
-    end
-  end
 end
