@@ -1,6 +1,6 @@
 require 'ostruct'
 
-# Store data structure (Hash) and allow access values using method calling
+# Store data structure (Hash) and allow access values using method calling.
 #
 #    Confugureasy::Config.new(foo: 'foo').foo
 #    # => 'foo'
@@ -22,6 +22,8 @@ class Configureasy::Config < OpenStruct
   # Convert a hash data into methods recursively.
   # Params:
   #  [+params+]:: Hash with data do convert
+  #
+  # Returns new instance of [Configureasy::Config].
   def initialize(params = {})
     @hash = params
     params = params.inject({}) do |hash, data|
@@ -32,17 +34,19 @@ class Configureasy::Config < OpenStruct
     super params
   end
 
-  # Return data for config
+  # Retrive some config value.
   # Params:
   #  [+key+]:: name of config
   #
   #    Configureasy::Config.new(foo: 'bar')[:foo]
   #    # => 'bar'
+  #
+  # Returns config value, or nil if can't reach config value.
   def [](key)
     self.send key
   end
 
-  # return config as hash
+  # Returns config as hash.
   def as_hash
     @hash
   end

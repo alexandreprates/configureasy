@@ -1,7 +1,10 @@
 require 'spec_helper'
 
 describe Configureasy::Configurable do
-  before(:all) { Configureasy::ConfigParser = double('ConfigParser') }
+  before(:each) do
+    allow(File).to receive(:exist?) { true }
+    allow(YAML).to receive(:load_file) { {'works' => 'true'} }
+  end
 
   describe '.load_config' do
     let(:dumb_class) do
@@ -21,8 +24,7 @@ describe Configureasy::Configurable do
     end
 
     it 'return ConfigParser content' do
-      expect(Configureasy::ConfigParser).to receive('parse').with('./config/dumb_config.yml').and_return('works')
-      expect(dumb_class.dumb_config).to eq 'works'
+      expect(dumb_class.dumb_config.works).to eq 'true'
     end
   end
 
@@ -35,9 +37,6 @@ describe Configureasy::Configurable do
     end
 
     it 'reloading config file content' do
-      Configureasy::ConfigParser = double('ConfigParser')
-      allow(Configureasy::ConfigParser).to receive('parse').with('./config/config.yml') { 'works'.clone }
-
       expect(dumb_class.config).not_to be dumb_class.config_reload!
     end
   end
@@ -51,10 +50,8 @@ describe Configureasy::Configurable do
     end
 
     it "load config content into config method" do
-      Configureasy::ConfigParser = double('ConfigParser')
-      expect(Configureasy::ConfigParser).to receive('parse').with('./config/deprecated.yml').and_return('works')
       expect(dumb_class).to respond_to :config
-      expect(dumb_class.config).to eq 'works'
+      expect(dumb_class.config.works).to eq('true')
     end
   end
 
@@ -67,10 +64,8 @@ describe Configureasy::Configurable do
     end
 
     it "load config with filename into config method" do
-      Configureasy::ConfigParser = double('ConfigParser')
-      expect(Configureasy::ConfigParser).to receive('parse').with('./deprecated/feature.yml').and_return('works')
       expect(dumb_class).to respond_to :config
-      expect(dumb_class.config).to eq 'works'
+      expect(dumb_class.config.works).to eq('true')
     end
   end
 

@@ -29,10 +29,11 @@ module Configureasy
   # Class to raise error on invalid config file
   class ConfigInvalid < Exception; end
 
-  def self.included(receiver)
+  def self.included(receiver) # :nodoc:
     receiver.extend Configurable
   end
 end
 
 require 'configureasy/config'
+require 'configureasy/config_parser'
 require 'configureasy/configurable'

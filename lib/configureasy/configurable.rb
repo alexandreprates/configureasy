@@ -17,7 +17,7 @@ require 'yaml'
 module Configureasy::Configurable
   @@configurables = {}
 
-  # dinamically create method for access config data
+  # dinamically create method for access config data.
   # Params:
   #  [+file_basename+]:: config file name (by default in *config* directory)
   #  [+as+]:: generated method name (by default same as file_basename)
@@ -30,8 +30,8 @@ module Configureasy::Configurable
     self.class.send(:define_method, "#{name}_reload!") { _configurable_reload(filename) }
   end
 
-  # @deprecated Please use {#load_config} instead
-  # Setting config source filename
+  # @deprecated Please use {#load_config} instead.
+  # Setting config source filename.
   # Params:
   #  [+name+]:: the name of config file
   #
@@ -45,8 +45,8 @@ module Configureasy::Configurable
     load_config name, as: 'config'
   end
 
-  # @deprecated Please use {#load_config} instead
-  # Load config in specific location
+  # @deprecated Please use {#load_config} instead.
+  # Load config in specific location.
   # Params
   #  [+filename+]:: config filename
   #
@@ -66,7 +66,7 @@ module Configureasy::Configurable
   end
 
   def _configurable_reload(filename) # :nodoc:
-    @@configurables[filename.to_sym] = Configureasy::ConfigParser.parse(filename)
+    @@configurables[filename.to_sym] = Configureasy::ConfigParser.new(filename).as_config
   end
 
 end
