@@ -49,7 +49,7 @@ Setting different method name
 
 class User
   include Configureasy
-  load_config :user_keys, as: keys
+  load_config :user_keys, as: :keys
 end
 
 User.keys.name # => 'secret_key'
