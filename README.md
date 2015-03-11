@@ -1,7 +1,7 @@
 Configureasy
 =============
 
-[![Build Status](https://travis-ci.org/alexandreprates/configureasy.svg?branch=master)](https://travis-ci.org/alexandreprates/configureasy) [![Coverage Status](https://coveralls.io/repos/alexandreprates/configureasy/badge.svg)](https://coveralls.io/r/alexandreprates/configureasy) [![Inline docs](http://inch-ci.org/github/alexandreprates/configureasy.svg?branch=master)](http://inch-ci.org/github/alexandreprates/configureasy)
+[![Build Status](https://travis-ci.org/alexandreprates/configureasy.svg?branch=master)](https://travis-ci.org/alexandreprates/configureasy) [![Coverage Status](https://coveralls.io/repos/alexandreprates/configureasy/badge.svg)](https://coveralls.io/r/alexandreprates/configureasy) [![Inline docs](http://inch-ci.org/github/alexandreprates/configureasy.svg?branch=master)](http://inch-ci.org/github/alexandreprates/configureasy) [![Code Climate](https://codeclimate.com/github/alexandreprates/configureasy/badges/gpa.svg)](https://codeclimate.com/github/alexandreprates/configureasy)
 
 Configureasy is a library for load configs quickly and easily.
 
