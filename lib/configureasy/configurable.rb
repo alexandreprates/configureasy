@@ -61,10 +61,14 @@ module Configureasy::Configurable
   private
 
   def _configurable_init(method_name, filename)
-    @@configurables[_configurable_key(method_name)] = { filename: filename, payload: nil }
-    unless self.class.respond_to? method_name
-      self.class.send(:define_method, method_name) { _configurable_for(method_name) }
-      self.class.send(:define_method, "#{method_name}_reload!") { _configurable_reload(method_name) }
+    @@configurables[_configurable_key(method_name)] = { filename: filename,
+                                                        payload: nil }
+    return if self.class.respond_to? method_name
+    self.class.send(:define_method, method_name) do
+      _configurable_for(method_name)
+    end
+    self.class.send(:define_method, "#{method_name}_reload!") do
+      _configurable_reload(method_name)
     end
   end
 
@@ -77,11 +81,13 @@ module Configureasy::Configurable
   end
 
   def _configurable_for(method_name) # :nodoc:
-    _configurable_hash(method_name)[:payload] || _configurable_reload(method_name)
+    _configurable_hash(method_name)[:payload] ||
+      _configurable_reload(method_name)
   end
 
   def _configurable_reload(method_name) # :nodoc:
-    _configurable_hash(method_name)[:payload] = Configureasy::ConfigParser.new(_configurable_hash(method_name)[:filename]).as_config
+    filename = _configurable_hash(method_name)[:filename]
+    config = Configureasy::ConfigParser.new(filename).as_config
+    _configurable_hash(method_name)[:payload] = config
   end
-
 end
