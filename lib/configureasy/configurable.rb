@@ -26,8 +26,7 @@ module Configureasy::Configurable
     name = options[:as] || file_basename
     path = options[:path] || './config'
     filename = File.join path, "#{file_basename}.yml"
-    self.class.send(:define_method, name)              { _configurable_for(filename) }
-    self.class.send(:define_method, "#{name}_reload!") { _configurable_reload(filename) }
+    _configurable_init(name, filename)
   end
 
   # @deprecated Please use {#load_config} instead.
@@ -40,7 +39,7 @@ module Configureasy::Configurable
   #
   #    # load contents for ./config/bar.yml
   #    config_name :bar
-    def config_name(name = nil)
+  def config_name(name = nil)
     warn "[DEPRECATION] `config_name` is deprecated.  Please use `load_config` instead."
     load_config name, as: 'config'
   end
@@ -61,12 +60,28 @@ module Configureasy::Configurable
 
   private
 
-  def _configurable_for(filename) # :nodoc:
-    @@configurables[filename.to_sym] || _configurable_reload(filename)
+  def _configurable_init(method_name, filename)
+    @@configurables[_configurable_key(method_name)] = { filename: filename, payload: nil }
+    unless self.class.respond_to? method_name
+      self.class.send(:define_method, method_name) { _configurable_for(method_name) }
+      self.class.send(:define_method, "#{method_name}_reload!") { _configurable_reload(method_name) }
+    end
   end
 
-  def _configurable_reload(filename) # :nodoc:
-    @@configurables[filename.to_sym] = Configureasy::ConfigParser.new(filename).as_config
+  def _configurable_key(method_name)
+    "#{self}.#{method_name}"
+  end
+
+  def _configurable_hash(method_name)
+    @@configurables[_configurable_key(method_name)]
+  end
+
+  def _configurable_for(method_name) # :nodoc:
+    _configurable_hash(method_name)[:payload] || _configurable_reload(method_name)
+  end
+
+  def _configurable_reload(method_name) # :nodoc:
+    _configurable_hash(method_name)[:payload] = Configureasy::ConfigParser.new(_configurable_hash(method_name)[:filename]).as_config
   end
 
 end

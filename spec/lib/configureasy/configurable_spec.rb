@@ -1,9 +1,29 @@
 require 'spec_helper'
 
+
 describe Configureasy::Configurable do
   before(:each) do
     allow(File).to receive(:exist?) { true }
     allow(YAML).to receive(:load_file) { {'works' => 'true'} }
+  end
+
+  context "when I have two modules with same config name" do
+    before do
+      module Foo
+        include Configureasy
+        load_config :foo, as: :config
+      end
+      module Bar
+        include Configureasy
+        load_config :bar, as: :config
+      end
+      expect(YAML).to receive(:load_file).with('./config/foo.yml') { {'name' => 'andré'} }
+      expect(YAML).to receive(:load_file).with('./config/bar.yml') { {'name' => 'rodrigo'} }
+   end
+
+    it 'has different outputs' do
+      expect(Foo.config).not_to eq(Bar.config)
+    end
   end
 
   describe '.load_config' do
