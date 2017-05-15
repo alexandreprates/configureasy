@@ -1,9 +1,34 @@
+# encoding: utf-8
+
 require 'spec_helper'
 
 describe Configureasy::Configurable do
   before(:each) do
     allow(File).to receive(:exist?) { true }
-    allow(YAML).to receive(:load_file) { {'works' => 'true'} }
+    allow(YAML).to receive(:load_file) { { 'works' => 'true' } }
+  end
+
+  context 'when I have two modules with same config name' do
+    before do
+      module Foo
+        include Configureasy
+        load_config :foo, as: :config
+      end
+      module Bar
+        include Configureasy
+        load_config :bar, as: :config
+      end
+      expect(YAML).to receive(:load_file).with('./config/foo.yml') do
+        { 'name' => 'andré' }
+      end
+      expect(YAML).to receive(:load_file).with('./config/bar.yml') do
+        { 'name' => 'rodrigo' }
+      end
+    end
+
+    it 'has different outputs' do
+      expect(Foo.config).not_to eq(Bar.config)
+    end
   end
 
   describe '.load_config' do
@@ -49,7 +74,7 @@ describe Configureasy::Configurable do
       end
     end
 
-    it "load config content into config method" do
+    it 'load config content into config method' do
       expect(dumb_class).to respond_to :config
       expect(dumb_class.config.works).to eq('true')
     end
@@ -63,10 +88,9 @@ describe Configureasy::Configurable do
       end
     end
 
-    it "load config with filename into config method" do
+    it 'load config with filename into config method' do
       expect(dumb_class).to respond_to :config
       expect(dumb_class.config.works).to eq('true')
     end
   end
-
 end
