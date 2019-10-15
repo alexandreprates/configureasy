@@ -19,6 +19,6 @@ group :test do
   gem 'rb-fsevent', '0.9.4' # guard-rspec dependency
   gem 'rb-inotify', '0.9.5' # guard-rspec dependency
 
-  gem 'guard-rspec', '4.5.0'
+  gem 'guard-rspec', '4.7.3'
   gem 'coveralls', '0.7.11', require: false
 end
