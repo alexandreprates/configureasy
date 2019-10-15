@@ -20,5 +20,5 @@ group :test do
   gem 'rb-inotify', '0.9.5' # guard-rspec dependency
 
   gem 'guard-rspec', '4.5.0'
-  gem 'coveralls', '0.7.11', require: false
+  gem 'coveralls', '0.8.5', require: false
 end
