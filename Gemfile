@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
-  gem 'terminal-notifier', '1.6.2'
+  gem 'terminal-notifier', '2.0.0'
   gem 'terminal-notifier-guard', '1.6.4'
   gem 'pry', '0.10.1'
   gem 'pry-nav', '0.2.4'
