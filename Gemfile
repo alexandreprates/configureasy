@@ -5,7 +5,7 @@ gemspec
 
 group :development do
   gem 'terminal-notifier', '1.6.2'
-  gem 'terminal-notifier-guard', '1.6.4'
+  gem 'terminal-notifier-guard', '1.7.0'
   gem 'pry', '0.10.1'
   gem 'pry-nav', '0.2.4'
 end
