@@ -14,7 +14,7 @@ group :test do
   gem 'rake', '10.4.2'
   gem 'rspec', '3.2.0'
 
-  gem 'tins', '1.3.5' # coveralls dependency
+  gem 'tins', '1.22.0' # coveralls dependency
   gem 'term-ansicolor', '1.3.0' # coveralls dependency
   gem 'rb-fsevent', '0.9.4' # guard-rspec dependency
   gem 'rb-inotify', '0.9.5' # guard-rspec dependency
