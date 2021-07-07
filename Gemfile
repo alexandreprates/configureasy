@@ -11,7 +11,7 @@ group :development do
 end
 
 group :test do
-  gem 'rake', '10.4.2'
+  gem 'rake', '13.0.4'
   gem 'rspec', '3.2.0'
 
   gem 'tins', '1.3.5' # coveralls dependency
